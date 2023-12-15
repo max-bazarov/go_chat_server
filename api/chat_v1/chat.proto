@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package chat_v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+option go_package = "github.com/max-bazarov/go_chat_server/pkg/chat_v1;chat_v1"; // where generated files will be contained. There is a package name of these files after ;
+// Why pkg? Because protoc generates grpc server and client. We will import client in other microservices if we want to make requests to this service
+
+service ChatAPIV1 {
+    rpc Create(CreateRequest) returns (CreateResponse);
+    rpc Delete(DeleteRequest) returns (google.protobuf.Empty);
+    rpc SendMessage(SendMessageRequest) returns (google.protobuf.Empty);
+  }
+
+message MessageInfo {
+    string from = 1;
+    string text = 2;
+    google.protobuf.Timestamp timestamp = 3;
+}
+
+message ChatInfo {
+    repeated string usernames = 1;
+}
+
+message Message {
+    int64 id = 1;
+    MessageInfo info = 2;
+    google.protobuf.Timestamp created_at = 3;
+    google.protobuf.Timestamp updated_at = 4;
+}
+
+message Chat {
+    int64 id = 1;
+    ChatInfo ingo = 2;
+    google.protobuf.Timestamp created_at = 3;
+    google.protobuf.Timestamp updated_at = 4;
+}
+
+message SendMessageRequest {
+    MessageInfo message = 1;
+}
+
+message CreateRequest {
+    ChatInfo chat = 1;
+}
+
+message CreateResponse {
+    int64 id = 1;
+}
+
+message GetRequest {
+    int64 id = 1;
+}
+
+message DeleteRequest {
+    int64 id = 1;
+}
